@@ -54,7 +54,7 @@ async function signin(req, res) {
  
 
 
-  async function getAllUsers(req, res) {
+  async function getUserbyToken(req, res) {
     try {
         const token = req.headers.authorization.split(' ')[1]; 
 
@@ -73,9 +73,19 @@ async function signin(req, res) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+async function getAllUsers(req, res) {
+  try {
+      const users = await User.findAll({ attributes: { exclude: ['password'] } });
+
+      res.status(200).json(users);
+  } catch (error) {
+      console.error('Error retrieving users:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 
 
-module.exports = { signup ,signin,getAllUsers};
+module.exports = { signup ,signin,getAllUsers,getUserbyToken};
 
 
